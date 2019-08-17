@@ -39,20 +39,20 @@ paths:
           description: "Conta cadastrada com sucesso"
         400:
           description: "Entrada inválida"
-  /conta/{agencia}/{conta}/saldo:
+  /conta/{numeroAgencia}/{numeroConta}/saldo:
     get:
       tags: 
         - "conta"
       summary: "Consulta o saldo da conta do usuário"
       parameters: 
         - in: "path"
-          name: "agencia" 
+          name: "numeroAgencia" 
           description: "número da agência do usuário"
           required: true
           type: "integer"
           format: "int32"
         - in: "path"
-          name: "conta"
+          name: "numeroConta"
           description: "número da conta do usuário"
           required: true
           type: "integer"
@@ -64,20 +64,20 @@ paths:
             $ref: "#/definitions/Conta"
         401:
           description: "Usuário não tem permissão para acessar o saldo dessa conta"
-  /conta/{agencia}/{conta}/extrato:
+  /conta/{numeroAgencia}/{numeroConta}/extrato:
     get:
       tags:
         - "conta"
       summary: "Consulta o extrato da conta do usuário"
       parameters: 
         - in: "path"
-          name: "agencia"
+          name: "numeroAgencia"
           description: "número da agência do usuário"
           required: true
           type: "integer"
           format: "int32"
         - in: "path"
-          name: "conta"
+          name: "numeroConta"
           description: "número da conta do usuário"
           required: true
           type: "integer"
@@ -89,12 +89,24 @@ paths:
            #  $ref: "#/definitions/Transacao"
         401:
           description: "Usuário não tem permissão para acessar o extrato dessa conta"
-  /favorecido:
+  /conta/{numeroAgencia}/{numeroConta}/favorecido:
     post:
       tags:
         - "favorecido"
       summary: "Cria um novo favorecido"
       parameters:
+        - in: "path"
+          name: "numeroAgencia"
+          description: "número da agência"
+          required: true
+          type: "integer"
+          format: "int32"
+        - in: "path"
+          name: "numeroConta"
+          description: "número da conta"
+          required: true
+          type: "integer"
+          format: "int32"
         - in: "body" 
           name: "favorecido"
           description: "informações do novo favorecido"
@@ -111,6 +123,18 @@ paths:
         - "favorecido"
       summary: "Edita o favorecido"
       parameters:
+        - in: "path"
+          name: "numeroAgencia"
+          description: "número da agência do usuário"
+          required: true
+          type: "integer"
+          format: "int32"
+        - in: "path"
+          name: "numeroConta"
+          description: "número da conta do usuário"
+          required: true
+          type: "integer"
+          format: "int32"
         - in: "body"
           name: "favorecido"
           description: "informações "
@@ -124,12 +148,24 @@ paths:
           description: "Entrada inválida"
         401:
           description: "Usuário não tem permissão para atualizar o favorecido"
-  /favorecido/{id}:
+  /conta/{numeroAgencia}/{numeroConta}/favorecido/{id}:
     delete:
       tags: 
         - "favorecido"
       summary: "Remove o favorecido"
       parameters:
+        - in: "path"
+          name: "numeroAgencia"
+          description: "número da agência do usuário"
+          required: true
+          type: "integer"
+          format: "int32"
+        - in: "path"
+          name: "numeroConta"
+          description: "número da agência do usuário"
+          required: true
+          type: "integer"
+          format: "int32"
         - in: "path"
           name: "id"
           description: "id do favorecido a ser removido"
@@ -211,7 +247,7 @@ definitions:
       cpf: 
         type: "string"
         example: 12345678912
-      agencia: 
+      numeroAgencia: 
         type: "integer"
         format: "int32"
       numeroConta: 
