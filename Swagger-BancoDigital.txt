@@ -179,12 +179,29 @@ paths:
           description: "O favorecido informado não é válido"
         404:
           description: "Favorecido não encontrado"
-  /transferencia:
+  /conta/{numeroAgencia}/{numeroConta}/transferencia:
     post:
       tags: 
         - "transferência"
       summary: "Realiza transferência bancária"
-      parameters: {}
+      parameters:
+        - in: "path"
+          name: "numeroAgencia"
+          description: "número da agência do usuário"
+          required: true
+          type: "integer"
+          format: "int32"
+        - in: "path"
+          name: "numeroConta"
+          description: "número da conta do usuário"
+          required: true
+          type: "integer"
+          format: "int32"
+        - in: "body"
+          name: "transferencia"
+          description: "informações sobre a transferência"
+          schema:
+            $ref: "#/definitions/Transferencia"
       responses: 
         201: 
           description: "Transferência realizada"
@@ -194,10 +211,24 @@ paths:
       tags:
         - "transferência"
       summary: "Lista as transferências bancárias"
-      parameters: {}
+      parameters: 
+        - in: "path"
+          name: "numeroAgencia"
+          description: "número da agência do usuário"
+          required: true
+          type: "integer"
+          format: "int32"
+        - in: "path"
+          name: "numeroConta"
+          description: "número da conta do usuário"
+          required: true
+          type: "integer"
+          format: "int32"
       responses:
         200:
           description: "Consulta realizada"
+          schema:
+            $ref: "#/definitions/Transferencia"
         401:
           description: "Usuário não tem permissão para acessar"
           
@@ -216,7 +247,6 @@ definitions:
         type: "number"
         format: "float"
       pessoa:
-        type: "object"
         $ref: "#/definitions/Pessoa"
   Favorecido:
     type: "object"
@@ -233,7 +263,6 @@ definitions:
           - "Conta poupança"
         example: "Conta corrente"
       pessoa:
-        type: "object"
         $ref: "#/definitions/Pessoa"
   Pessoa:
     type: "object"
@@ -253,4 +282,15 @@ definitions:
       numeroConta: 
         type: "integer"
         format: "int32"
+  Transferencia:
+    type: "object"
+    properties:
+      id: 
+        type: "integer"
+        format: "int32"
+      valor:
+        type: "number" 
+        format: "float" # ou double?
+      
+        
         
