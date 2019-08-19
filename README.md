@@ -1,5 +1,5 @@
 # BancoDigital
-Modelagem de API com swagger de um banco digital
+Modelagem de API com swagger de um banco digital (utilizando o http://editor.swagger.io/)
 
 Operações:
   - Abertura de conta-corrente
