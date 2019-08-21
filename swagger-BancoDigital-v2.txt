@@ -261,10 +261,22 @@ definitions:
       saldo:
         type: "number"
         format: "double"
+      pessoa:
+        $ref: "#/definitions/Pessoa"
   Favorecido:
     type: "object"
     properties:
       id: 
+        type: "integer"
+        format: "int64"
+      nomeBanco: 
+        type: "string"
+      pessoa: 
+        $ref: "#/definitions/Pessoa"
+  Pessoa:
+    type: "object"
+    properties:
+      id:
         type: "integer"
         format: "int64"
       name:
@@ -290,3 +302,4 @@ definitions:
       valor:
         type: "number"
         format: "float"
+      
