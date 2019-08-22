@@ -1,254 +1,274 @@
 swagger: "2.0"
 info:
-  description: "API de um banco digital"
-  version: "1.0.0"
-  title: "Banco Digital"
-  contact: {
-    name: "Suporte",
+  title: "API - Banco Digital"
+  version: "2.0"
+  description: "Modelagem de API de um banco digital"
+  contact:
+    name: "Support"
     email: "kariinagomes_@hotmail.com"
-  }
 host: "bancodigital"
 basePath: "/v1"
-tags:
-  - name: "conta"
-    description: "Cadastro e informações sobre a conta"
-  - name: "favorecido"
-    description: "Cadastro e informações sobre favorecidos"
-  - name: "transferência"
-    description: "Consultar e realizar transferências"
-schemes:
+schemes: 
   - "http"
   - "https"
-consumes: 
-  - "application/json"
-produces: 
-  - "application/json"
+tags:
+  - name: "Conta"
+    description: "CriaÃ§Ã£o de conta e consultas relacionadas a mesma"
+  - name: "Favorecido"
+    description: "InclusÃ£o, ediÃ§Ã£o e exclusÃ£o de favorecidos"
+  - name: "TransferÃªncia"
+    description: "Realizar e visualizar as transferÃªncias"
 
 paths:
   /conta:
     post:
-      tags: 
-        - "conta"
-      summary: "Cria uma nova conta corrente"
+      tags:
+        - "Conta"
+      summary: "Cria uma nova conta bancÃ¡ria"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
       parameters:
         - in: "body"
           name: "conta"
-          description: "informações da nova conta"
-          required: true
           schema:
             $ref: "#/definitions/Conta"
       responses:
-        201: 
+        201:
           description: "Conta cadastrada com sucesso"
+          schema:
+            $ref: "#/definitions/Conta"
         400:
-          description: "Entrada inválida"
+          description: "Entrada invÃ¡lida"
   /conta/{numeroAgencia}/{numeroConta}/saldo:
     get:
       tags: 
-        - "conta"
-      summary: "Consulta o saldo da conta do usuário"
-      parameters: 
+        - "Conta"
+      summary: "Consulta o saldo da conta bancÃ¡ria"
+      produces:
+        - "application/json"
+      parameters:
         - in: "path"
-          name: "numeroAgencia" 
-          description: "número da agência do usuário"
-          required: true
+          name: "numeroAgencia"
           type: "integer"
           format: "int32"
+          required: true
         - in: "path"
           name: "numeroConta"
-          description: "número da conta do usuário"
-          required: true
           type: "integer"
           format: "int32"
+          required: true
       responses:
-        200: 
-          description: "Consulta realizada"
-          schema:
+        200:
+          description: "Consulta do saldo realizada com sucesso"
+          schema: 
             $ref: "#/definitions/Conta"
         401:
-          description: "Usuário não tem permissão para acessar o saldo dessa conta"
+          description: "Sem permissÃ£o de acesso"
+        403:
+          description: "Sem permissÃ£o de acesso"
   /conta/{numeroAgencia}/{numeroConta}/extrato:
     get:
       tags:
-        - "conta"
-      summary: "Consulta o extrato da conta do usuário"
-      parameters: 
+        - "Conta"
+      summary: "Consulta o extrato da conta bancÃ¡ria"
+      produces:
+        - "application/json"
+      parameters:
         - in: "path"
           name: "numeroAgencia"
-          description: "número da agência do usuário"
-          required: true
           type: "integer"
           format: "int32"
+          required: true
         - in: "path"
           name: "numeroConta"
-          description: "número da conta do usuário"
-          required: true
           type: "integer"
           format: "int32"
+          required: true
       responses:
         200: 
-          description: "Consulta realizada"
-          schema: 
+          description: "Consulta do extrato realizada com sucesso"
+          schema:
             $ref: "#/definitions/Transacao"
         401:
-          description: "Usuário não tem permissão para acessar o extrato dessa conta"
+          description: "Sem permissÃ£o de acesso"
+        403:
+          description: "Sem permissÃ£o de acesso"
   /conta/{numeroAgencia}/{numeroConta}/favorecido:
     post:
       tags:
-        - "favorecido"
-      summary: "Cria um novo favorecido"
+        - "Favorecido"
+      summary: "Cadastra um novo favorecido"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
       parameters:
         - in: "path"
           name: "numeroAgencia"
-          description: "número da agência"
-          required: true
           type: "integer"
           format: "int32"
+          required: true
         - in: "path"
           name: "numeroConta"
-          description: "número da conta"
-          required: true
           type: "integer"
           format: "int32"
-        - in: "body" 
-          name: "favorecido"
-          description: "informações do novo favorecido"
           required: true
-          schema:
-            $ref: "#/definitions/Favorecido"
-      responses:
-        201: 
-          description: "Favorecido cadastrado com sucesso"
-        400:
-          description: "Entrada inválida"
-    put: # passa o id do favorecido ou considera que está no body?
-      tags: 
-        - "favorecido"
-      summary: "Edita o favorecido"
-      parameters:
-        - in: "path"
-          name: "numeroAgencia"
-          description: "número da agência do usuário"
-          required: true
-          type: "integer"
-          format: "int32"
-        - in: "path"
-          name: "numeroConta"
-          description: "número da conta do usuário"
-          required: true
-          type: "integer"
-          format: "int32"
         - in: "body"
           name: "favorecido"
-          description: "informações "
+          schema:
+            $ref: "#/definitions/Favorecido"
+      responses:
+        201:
+          description: "Favorecido cadastrado com sucesso"
+          schema: 
+            $ref: "#/definitions/Favorecido"
+        400:
+          description: "Entrada invÃ¡lida"
+  /conta{numeroAgencia}/{numeroConta}/favorecido/{favorecidoId}:
+    put:
+      tags:
+        - "Favorecido"
+      summary: "Edita um favorecido"
+      consumes: 
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "numeroAgencia"
+          type: "integer"
+          format: "int32"
+          required: true
+        - in: "path"
+          name: "numeroConta"
+          type: "integer"
+          format: "int32"
+          required: true
+        - in: "path"
+          name: "favorecidoId"
+          type: "integer"
+          format: "int64"
+          required: true
+        - in: "body"
+          name: "favorecido"
           required: true
           schema:
             $ref: "#/definitions/Favorecido"
       responses:
-        200:
-          description: "Favorecido atualizado!"
-        400:
-          description: "Entrada inválida"
-        401:
-          description: "Usuário não tem permissão para atualizar o favorecido"
-  /conta/{numeroAgencia}/{numeroConta}/favorecido/{id}:
+        200: 
+          description: "Favorecido atualizado"
+          schema:
+            $ref: "#/definitions/Favorecido"
+        401: 
+          description: "Sem permissÃ£o de acesso"
+        403: 
+          description: "Sem permissÃ£o de acesso"
     delete:
       tags: 
-        - "favorecido"
-      summary: "Remove o favorecido"
+        - "Favorecido"
+      summary: "Remove um favorecido"
+      produces:
+        - "application/json"
       parameters:
         - in: "path"
           name: "numeroAgencia"
-          description: "número da agência do usuário"
-          required: true
-          type: "integer"
-          format: "int64"
-        - in: "path"
-          name: "numeroConta"
-          description: "número da agência do usuário"
-          required: true
           type: "integer"
           format: "int32"
-        - in: "path"
-          name: "id"
-          description: "id do favorecido a ser removido"
           required: true
+        - in: "path"
+          name: "numeroConta"
+          type: "integer"
+          format: "int32"
+          required: true
+        - in: "path"
+          name: "favorecidoId"
           type: "integer"
           format: "int64"
+          required: true
       responses:
-        204: 
+        204:
           description: "Favorecido removido com sucesso"
         400:
-          description: "O favorecido informado não é válido"
-        404:
-          description: "Favorecido não encontrado"
-  /conta/{numeroAgencia}/{numeroConta}/transferencia:
-    post:
+          description: "RequisiÃ§Ã£o invÃ¡lida"
+        401:
+          description: "Sem permissÃ£o de acesso"
+        403:
+          description: "Sem permissÃ£o de acesso"
+  /conta/{numeroAgencia}/{numeroConta}/transacao:
+    post: 
       tags: 
-        - "transferência"
-      summary: "Realiza transferência bancária"
+        - "TransferÃªncia"
+      summary: "Realiza uma nova transferÃªncia bancÃ¡ria"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
       parameters:
         - in: "path"
           name: "numeroAgencia"
-          description: "número da agência do usuário"
-          required: true
           type: "integer"
           format: "int32"
+          required: true
         - in: "path"
           name: "numeroConta"
-          description: "número da conta do usuário"
-          required: true
           type: "integer"
           format: "int32"
+          required: true
         - in: "body"
-          name: "transferencia"
-          description: "informações sobre a transferência"
+          name: "transacao"
+          required: true
+          schema: 
+            $ref: "#/definitions/Transacao"
+      responses:
+        201:
+          description: "TransferÃªncia realizada"
           schema:
             $ref: "#/definitions/Transacao"
-      responses: 
-        201: 
-          description: "Transferência realizada"
-        400:
-          description: "Entrada inválida"
+        400: 
+          description: "Entrada invÃ¡lida"
+        401:
+          description: "Sem permissÃ£o de acesso"
+        403:
+          description: "Sem permissÃ£o de acesso"
     get:
       tags:
-        - "transferência"
-      summary: "Lista as transferências bancárias"
+        - "TransferÃªncia"
+      summary: "Consulta as transferÃªncias bancÃ¡rias"
+      produces:
+        - "application/json"
       parameters: 
         - in: "path"
           name: "numeroAgencia"
-          description: "número da agência do usuário"
-          required: true
           type: "integer"
           format: "int32"
+          required: true
         - in: "path"
           name: "numeroConta"
-          description: "número da conta do usuário"
-          required: true
           type: "integer"
           format: "int32"
+          required: true
       responses:
         200:
           description: "Consulta realizada"
           schema:
             $ref: "#/definitions/Transacao"
         401:
-          description: "Usuário não tem permissão para acessar"
-          
+          description: "Sem permissÃ£o de acesso"
+        403:
+          description: "Sem permissÃ£o de acesso"
+        
 definitions:
   Conta:
     type: "object"
     properties:
-      id:
+      id: 
         type: "integer"
         format: "int64"
-      senha:
-        type: "string"
-        format: "password"
-        example: "123A"
       saldo:
         type: "number"
-        format: "float"
+        format: "double"
       pessoa:
         $ref: "#/definitions/Pessoa"
   Favorecido:
@@ -257,29 +277,22 @@ definitions:
       id: 
         type: "integer"
         format: "int64"
-      instituicao:
+      nomeBanco: 
         type: "string"
-      tipoConta:
-        type: "string"
-        enum:
-          - "Conta corrente"
-          - "Conta poupança"
-        example: "Conta corrente"
-      pessoa:
+      pessoa: 
         $ref: "#/definitions/Pessoa"
   Pessoa:
     type: "object"
     properties:
-      id: 
+      id:
         type: "integer"
         format: "int64"
-      nome: 
+      name:
         type: "string"
-        example: "Karina Gomes"
-      cpf: 
-        type: "string"
-        example: 12345678912
-      numeroAgencia: 
+      cpf:
+        type: "integer"
+        format: "int64"
+      numeroAgencia:
         type: "integer"
         format: "int32"
       numeroConta: 
@@ -291,15 +304,9 @@ definitions:
       id: 
         type: "integer"
         format: "int64"
-      valor:
-        type: "number" 
-        format: "float" # ou double?
-      date:
+      dataTransacao: 
         type: "string"
-        format: "date-time"
-      
-      conta: #ou contaId?
-        $ref: "#/definitions/Conta"
-      favorecido: #ou favorecidoId?
-        $ref: "#/definitions/Favorecido"
-      
+        format: "date"
+      valor:
+        type: "number"
+        format: "float"
