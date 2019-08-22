@@ -9,13 +9,18 @@ info:
   license:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: "petstore.swagger.io"
+host: "sciensabank.swagger.io"
 basePath: "/api/v1"
 produces:
   - "application/json"
+consumes: 
+  - "application/json"
 schemes:
-- "https"  
- 
+- "https"
+tags: 
+  - name: "Contas"
+  - name: "Favorecidos"
+
 # ****************** ANOTAÇÕES *************************
  # No URI sempre no plural e precisa ser um substantivo
 
@@ -35,6 +40,8 @@ schemes:
 paths:
   /contas:
     post:
+      tags:
+        - "Contas"
       summary: "Rota de abertura de conta corrente"
       operationId: "createAccount"
       parameters:
@@ -70,11 +77,13 @@ paths:
           description: "erro não mapeado"
           schema:
             $ref: "#/definitions/ResponseError"
-
+  
   # Para a consulta do saldo, poderia ser:
   #   get em /contas/{id} ou /contas/current ou /contas/{agencia}/{conta}
   /contas/{agencia}/{conta-corrente}:
     get:
+      tags:
+        - "Contas"
       summary: "Consulta de informações gerais da conta-corrente"
       operationId: "getAccountDetails"
       parameters:
@@ -124,6 +133,8 @@ paths:
   
   /contas/{agencia}/{conta-corrente}/extrato:
     get:
+      tags:
+        - "Contas"
       summary: "Retorna as informações do Extrato"
       operationId: "getExtrato"
       parameters:
@@ -167,6 +178,8 @@ paths:
         
   /contas/{agencia}/{conta-corrente}/favorecidos:
     post:
+      tags:
+        - "Favorecidos"
       summary: "Cadastra um favorecido"
       operationId: "createFavored"
       parameters:
@@ -176,7 +189,7 @@ paths:
           name: "request"
           required: true
           schema:
-            $ref: "#/definitions/Favorecido"
+            $ref: '#/definitions/Favorecido'
       responses:
         201:
           description: "Favorecido cadastrado com suecesso"
@@ -204,10 +217,12 @@ paths:
   # /contas/{agencia}/{conta-corrente}/transferencias:
   #  post:
   #
-  #  get:
+  #  get:  
 
   /health:
     get:
+      tags:
+        - "Healthcheck"
       summary: "Rota de healthcheck da aplicação"
       operationId: "health"
       responses:
@@ -219,7 +234,6 @@ paths:
                 type: string
               environment:
                 type: string
-      
 
 definitions:
   ResponseError:
@@ -273,8 +287,6 @@ definitions:
         type: string
       cpf:
         type: integer
-      foto:
-        type: string #BASE64 AQUI AJUSTAR DPS
   
   Transacao:
     type: object
@@ -305,7 +317,6 @@ definitions:
         minLength: 11
       banco:
         type: string
-        
 
 parameters:
   Agencia:
@@ -317,8 +328,7 @@ parameters:
 
   Conta:
     in: path
-    # não aconselhável colocar contaCorrente
-    name: "conta-corrente"
+    name: "conta-corrente" # não aconselhável colocar contaCorrente
     type: number
     format: int32
     required: true
